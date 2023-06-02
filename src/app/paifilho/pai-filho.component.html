@@ -1,0 +1,77 @@
+<h2>Selecione um Pai:</h2>
+<mat-form-field>
+  <mat-label>Pai</mat-label>
+  <mat-select [(ngModel)]="paiSelecionado" (ngModelChange)="onSelectPai()">
+    <mat-option *ngFor="let pai of pais" [value]="pai">
+      {{ pai.nome }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<h2>Filhos:</h2>
+<button mat-icon-button (click)="adicionarFilho()">
+  <mat-icon>add_box</mat-icon>
+</button>
+<table mat-table [dataSource]="filhos" class="mat-elevation-z8">
+  <!-- Coluna ID -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let filho">{{ filho.id }}</td>
+  </ng-container>
+
+  <!-- Coluna Nome -->
+  <ng-container matColumnDef="nome">
+    <th mat-header-cell *matHeaderCellDef>Nome</th>
+    <td mat-cell *matCellDef="let filho">
+      <ng-container *ngIf="editingFilho === filho">
+        <mat-form-field>
+          <input matInput [(ngModel)]="filho.nome">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="editingFilho !== filho">{{ filho.nome }}</ng-container>
+    </td>
+  </ng-container>
+
+  <!-- Coluna Idade -->
+  <ng-container matColumnDef="idade">
+    <th mat-header-cell *matHeaderCellDef>Idade</th>
+    <td mat-cell *matCellDef="let filho">
+      <ng-container *ngIf="editingFilho === filho">
+        <mat-form-field>
+          <input matInput [(ngModel)]="filho.idade">
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="editingFilho !== filho">{{ filho.idade }}</ng-container>
+    </td>
+  </ng-container>
+
+  <!-- Coluna Ações -->
+  <ng-container matColumnDef="acoes">
+    <th mat-header-cell *matHeaderCellDef>Ações</th>
+    <td mat-cell *matCellDef="let filho">
+      <ng-container *ngIf="filho.id; else acoesTemplate">
+        <button mat-icon-button (click)="onEditFilho(filho)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="onSaveFilho(filho)" *ngIf="editingFilho === filho">
+          <mat-icon>save</mat-icon>
+        </button>
+      </ng-container>
+      <ng-template #acoesTemplate>
+        <button mat-icon-button (click)="onSaveFilho(filho)">
+          <mat-icon>save</mat-icon>
+        </button>
+      </ng-template>
+    </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+  <tr mat-row *matRowDef="let row; columns: colunas; let last = last; index as i;">
+  </tr>
+</table>
+
+
+
+
+
